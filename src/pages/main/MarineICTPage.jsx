@@ -1,33 +1,12 @@
-import styled from "styled-components";
+import * as S from "./MarineICTPage.style";
 import { useEffect, useRef } from "react";
-import Navigation from "../components/Navigation";
-import HeroSection from "../components/HeroSection";
-import AISection from "../components/AISection";
-import TechSection from "../components/TechSection";
-import Footer from "../components/Footer";
-import NeuralCanvas from "../components/NeuralCanvas";
-
-const PageContainer = styled.div`
-  background: #030810;
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
-`;
-
-const CanvasWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-`;
-
-const ContentWrapper = styled.div`
-  position: relative;
-  z-index: 1;
-`;
+import Navigation from "../../components/main/Navigation";
+import HeroSection from "../../components/main/HeroSection";
+import AISection from "../../components/main/AISection";
+import YOLOSection from "../../components/main/YOLOSection";
+import TechSection from "../../components/main/TechSection";
+import Footer from "../../components/main/Footer";
+import NeuralCanvas from "../../components/main/NeuralCanvas";
 
 export default function MarineICTPage() {
   const canvasRef = useRef(null);
@@ -54,7 +33,7 @@ export default function MarineICTPage() {
             }
           });
         },
-        { threshold: 0.05, rootMargin: "0px 0px 120px 0px" }
+        { threshold: 0.05, rootMargin: "0px 0px 120px 0px" },
       );
 
       revealElements.forEach((el) => observer.observe(el));
@@ -73,17 +52,18 @@ export default function MarineICTPage() {
   }, []);
 
   return (
-    <PageContainer>
-      <CanvasWrapper>
+    <S.PageContainer>
+      <S.CanvasWrapper>
         <NeuralCanvas ref={canvasRef} />
-      </CanvasWrapper>
-      <ContentWrapper>
+      </S.CanvasWrapper>
+      <S.ContentWrapper>
         <Navigation />
         <HeroSection />
         <AISection />
+        <YOLOSection />
         <TechSection />
         <Footer />
-      </ContentWrapper>
-    </PageContainer>
+      </S.ContentWrapper>
+    </S.PageContainer>
   );
 }

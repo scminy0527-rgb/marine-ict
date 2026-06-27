@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import RadarVisualization from "./RadarVisualization";
+import { theme } from "../../styles/theme";
 
 const Section = styled.section`
   position: relative;
@@ -8,7 +8,7 @@ const Section = styled.section`
   align-items: center;
   overflow: hidden;
   z-index: 1;
-  padding-top: 68px;
+  padding-top: ${theme.SPACING.navHeight};
 `;
 
 const AmbientGradient1 = styled.div`
@@ -16,7 +16,7 @@ const AmbientGradient1 = styled.div`
   inset: 0;
   background: radial-gradient(
     ellipse 900px 700px at 25% 55%,
-    rgba(0, 60, 140, 0.22),
+    ${theme.COLOR.heroAmbientGradient1},
     transparent
   );
   pointer-events: none;
@@ -27,7 +27,7 @@ const AmbientGradient2 = styled.div`
   inset: 0;
   background: radial-gradient(
     ellipse 500px 500px at 75% 45%,
-    rgba(0, 80, 120, 0.18),
+    ${theme.COLOR.heroAmbientGradient2},
     transparent
   );
   pointer-events: none;
@@ -36,9 +36,9 @@ const AmbientGradient2 = styled.div`
 const ContentContainer = styled.div`
   position: relative;
   z-index: 2;
-  max-width: 1240px;
+  max-width: ${theme.SPACING.containerMaxWidth};
   margin: 0 auto;
-  padding: 80px 56px;
+  padding: ${theme.SPACING.sectionPaddingVerticalHero} ${theme.SPACING.containerPadding};
   width: 100%;
   display: flex;
   align-items: center;
@@ -61,15 +61,15 @@ const BadgeDot = styled.div`
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #00aaff;
-  box-shadow: 0 0 12px #00aaff;
+  background: ${theme.COLOR.primaryLight};
+  box-shadow: 0 0 12px ${theme.COLOR.primaryLight};
   animation: blink 2.5s ease-in-out infinite;
 `;
 
 const BadgeText = styled.span`
   font-family: Orbitron;
   font-size: 10px;
-  color: #00aaff;
+  color: ${theme.COLOR.primaryLight};
   letter-spacing: 5px;
 `;
 
@@ -79,11 +79,11 @@ const Title = styled.h1`
   font-weight: 700;
   line-height: 1.15;
   margin: 0 0 28px;
-  color: #fff;
+  color: ${theme.COLOR.white};
   word-break: keep-all;
 
   span {
-    background: linear-gradient(120deg, #00aaff 0%, #00e5c8 50%, #00aaff 100%);
+    background: linear-gradient(120deg, ${theme.COLOR.primaryLight} 0%, ${theme.COLOR.secondary} 50%, ${theme.COLOR.primaryLight} 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -109,12 +109,12 @@ const Button = styled.a`
   display: inline-block;
   padding: 14px 32px;
   background: ${(props) =>
-    props.primary
-      ? "linear-gradient(135deg, rgba(0,160,255,0.18), rgba(0,220,200,0.08))"
+    props.$primary
+      ? theme.COLOR.heroButtonGradient
       : "transparent"};
   border: 1px solid
-    ${(props) => (props.primary ? "rgba(0,190,255,0.5)" : "rgba(160,200,240,0.18)")};
-  color: ${(props) => (props.primary ? "#00d4ff" : "rgba(160,200,240,0.65)")};
+    ${(props) => (props.$primary ? theme.COLOR.heroButtonBorder : theme.COLOR.heroButtonSecondaryBorder)};
+  color: ${(props) => (props.$primary ? "#00d4ff" : theme.COLOR.heroButtonSecondaryText)};
   font-size: 14px;
   font-family: "Noto Sans KR";
   letter-spacing: 1.5px;
@@ -124,9 +124,9 @@ const Button = styled.a`
 
   &:hover {
     ${(props) =>
-      props.primary
-        ? "border-color: #00aaff; box-shadow: 0 0 20px rgba(0, 170, 255, 0.3);"
-        : "border-color: rgba(160,200,240,0.5); color: rgba(160,200,240,0.85);"}
+      props.$primary
+        ? `border-color: ${theme.COLOR.primaryLight}; box-shadow: 0 0 20px rgba(0, 170, 255, 0.3);`
+        : `border-color: rgba(160,200,240,0.5); color: rgba(160,200,240,0.85);`}
   }
 `;
 
@@ -152,14 +152,14 @@ const ScrollIndicator = styled.div`
 const ScrollText = styled.span`
   font-family: Orbitron;
   font-size: 9px;
-  color: rgba(160, 200, 240, 0.35);
+  color: ${theme.COLOR.heroScrollText};
   letter-spacing: 4px;
 `;
 
 const ScrollLine = styled.div`
   width: 1px;
   height: 44px;
-  background: linear-gradient(to bottom, rgba(0, 160, 255, 0.6), transparent);
+  background: ${theme.COLOR.heroScrollLineGradient};
   position: relative;
   overflow: hidden;
 
@@ -170,7 +170,7 @@ const ScrollLine = styled.div`
     left: 0;
     width: 100%;
     height: 40%;
-    background: linear-gradient(to bottom, #00aaff, transparent);
+    background: ${theme.COLOR.heroScrollLineInner};
     animation: scanDrop 2s linear infinite;
   }
 `;
@@ -181,53 +181,27 @@ const BottomFade = styled.div`
   left: 0;
   right: 0;
   height: 180px;
-  background: linear-gradient(to bottom, transparent, #030810);
+  background: ${theme.COLOR.heroBottomFade};
   pointer-events: none;
   z-index: 2;
 `;
 
-export default function HeroSection() {
-  return (
-    <Section id="about">
-      <AmbientGradient1 />
-      <AmbientGradient2 />
-
-      <ContentContainer>
-        <LeftContent>
-          <Badge>
-            <BadgeDot />
-            <BadgeText>MARINE ICT SOLUTIONS</BadgeText>
-          </Badge>
-
-          <Title>
-            해양의 미래를<br />
-            <span>기술로 설계하다</span>
-          </Title>
-
-          <Description>
-            바다의 방대한 데이터를 인공지능으로 분석하고<br />
-            최적화된 솔루션을 제공하는 해양 ICT 전문 기업
-          </Description>
-
-          <ButtonContainer>
-            <Button href="#ai" primary>
-              AI 기술 알아보기
-            </Button>
-            <Button href="#tech">솔루션 보기</Button>
-          </ButtonContainer>
-        </LeftContent>
-
-        <RightContent>
-          <RadarVisualization />
-        </RightContent>
-      </ContentContainer>
-
-      <ScrollIndicator>
-        <ScrollText>SCROLL</ScrollText>
-        <ScrollLine />
-      </ScrollIndicator>
-
-      <BottomFade />
-    </Section>
-  );
-}
+export {
+  Section,
+  AmbientGradient1,
+  AmbientGradient2,
+  ContentContainer,
+  LeftContent,
+  Badge,
+  BadgeDot,
+  BadgeText,
+  Title,
+  Description,
+  ButtonContainer,
+  Button,
+  RightContent,
+  ScrollIndicator,
+  ScrollText,
+  ScrollLine,
+  BottomFade,
+};

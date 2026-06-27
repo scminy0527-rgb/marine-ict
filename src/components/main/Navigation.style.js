@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { theme } from "../../styles/theme";
 
 const Nav = styled.nav`
   position: fixed;
@@ -6,14 +7,14 @@ const Nav = styled.nav`
   left: 0;
   right: 0;
   z-index: 100;
-  height: 68px;
+  height: ${theme.SPACING.navHeight};
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 56px;
-  background: rgba(3, 8, 16, 0.85);
+  padding: 0 ${theme.SPACING.containerPadding};
+  background: ${theme.COLOR.navBg};
   backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(0, 150, 255, 0.1);
+  border-bottom: 1px solid ${theme.COLOR.navBorder};
 `;
 
 const LogoContainer = styled.div`
@@ -25,7 +26,7 @@ const LogoContainer = styled.div`
 const LogoBox = styled.div`
   width: 34px;
   height: 34px;
-  border: 1px solid rgba(0, 180, 255, 0.5);
+  border: 1px solid ${theme.COLOR.navBorderBox};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,8 +37,8 @@ const LogoDot = styled.div`
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #00aaff;
-  box-shadow: 0 0 14px #00aaff;
+  background: ${theme.COLOR.primaryLight};
+  box-shadow: 0 0 14px ${theme.COLOR.primaryLight};
 `;
 
 const RotatedBorder = styled.div`
@@ -46,7 +47,7 @@ const RotatedBorder = styled.div`
   left: -1px;
   right: -1px;
   bottom: -1px;
-  border: 1px solid rgba(0, 200, 255, 0.2);
+  border: 1px solid ${theme.COLOR.navBorderRotated};
   transform: rotate(45deg);
 `;
 
@@ -59,7 +60,7 @@ const LogoTitle = styled.div`
   font-family: Orbitron;
   font-size: 13px;
   font-weight: 600;
-  color: #fff;
+  color: ${theme.COLOR.white};
   letter-spacing: 3px;
 `;
 
@@ -78,14 +79,14 @@ const NavLinksContainer = styled.div`
 
 const NavLink = styled.a`
   font-size: 13px;
-  color: rgba(160, 200, 240, 0.6);
+  color: ${theme.COLOR.navText};
   text-decoration: none;
   letter-spacing: 1px;
   transition: color 0.2s;
   cursor: pointer;
 
   &:hover {
-    color: #00aaff;
+    color: ${theme.COLOR.primaryLight};
   }
 `;
 
@@ -93,37 +94,16 @@ const ContactButton = styled.a`
   font-size: 13px;
   padding: 8px 22px;
   border: 1px solid rgba(0, 170, 255, 0.4);
-  color: #00aaff;
+  color: ${theme.COLOR.primaryLight};
   text-decoration: none;
   letter-spacing: 1px;
   transition: all 0.25s;
   cursor: pointer;
 
   &:hover {
-    border-color: #00aaff;
+    border-color: ${theme.COLOR.primaryLight};
     box-shadow: 0 0 20px rgba(0, 170, 255, 0.3);
   }
 `;
 
-export default function Navigation() {
-  return (
-    <Nav>
-      <LogoContainer>
-        <LogoBox>
-          <LogoDot />
-          <RotatedBorder />
-        </LogoBox>
-        <LogoText>
-          <LogoTitle>MARINE ICT</LogoTitle>
-          <LogoSubtitle>해양 ICT 솔루션</LogoSubtitle>
-        </LogoText>
-      </LogoContainer>
-      <NavLinksContainer>
-        <NavLink href="#about">소개</NavLink>
-        <NavLink href="#ai">AI 기술</NavLink>
-        <NavLink href="#tech">솔루션</NavLink>
-        <ContactButton href="#contact">문의하기</ContactButton>
-      </NavLinksContainer>
-    </Nav>
-  );
-}
+export { Nav, LogoContainer, LogoBox, LogoDot, RotatedBorder, LogoText, LogoTitle, LogoSubtitle, NavLinksContainer, NavLink, ContactButton };
