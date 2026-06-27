@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; padding: 0; background: #030810; color: #d0e8ff; font-family: 'Noto Sans KR', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-14px); }
+    }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(0,170,255,0.3), 0 0 50px rgba(0,170,255,0.1); }
+      50% { box-shadow: 0 0 50px rgba(0,170,255,0.7), 0 0 100px rgba(0,170,255,0.25); }
+    }
+    @keyframes rotateRing {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes counterRing {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(-360deg); }
+    }
+    @keyframes dataDot {
+      0%   { left: -6%; opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { left: 106%; opacity: 0; }
+    }
+    @keyframes shimmerText {
+      0%   { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scanDrop {
+      0%   { top: 0%; opacity: 0; }
+      5%   { opacity: 1; }
+      95%  { opacity: 0.6; }
+      100% { top: 100%; opacity: 0; }
+    }
+    @keyframes borderGlow {
+      0%, 100% { border-color: rgba(0,160,255,0.2); }
+      50%       { border-color: rgba(0,220,255,0.55); }
+    }
+  </style>
+
+<template id="__bundler_thumbnail" data-bg-color="#030810">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect width="1200" height="800" fill="#030810"/>
+    <!-- Grid lines -->
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="rgba(0,100,210,0.08)" stroke-width="1"/>
+    <line x1="600" y1="0" x2="600" y2="800" stroke="rgba(0,100,210,0.08)" stroke-width="1"/>
+    <!-- Radar rings -->
+    <circle cx="880" cy="400" r="280" fill="none" stroke="rgba(0,160,255,0.12)" stroke-width="1"/>
+    <circle cx="880" cy="400" r="200" fill="none" stroke="rgba(0,160,255,0.15)" stroke-width="1"/>
+    <circle cx="880" cy="400" r="120" fill="none" stroke="rgba(0,180,255,0.22)" stroke-width="1"/>
+    <circle cx="880" cy="400" r="55" fill="none" stroke="rgba(0,200,255,0.3)" stroke-width="1"/>
+    <!-- Radar sweep -->
+    <line x1="880" y1="400" x2="1160" y2="400" stroke="rgba(0,210,255,0.6)" stroke-width="1.5"/>
+    <!-- Center dot -->
+    <circle cx="880" cy="400" r="8" fill="#00c8ff" opacity="0.9"/>
+    <circle cx="880" cy="400" r="20" fill="rgba(0,200,255,0.15)"/>
+    <!-- Neural nodes -->
+    <circle cx="120" cy="200" r="3" fill="rgba(0,180,255,0.5)"/>
+    <circle cx="260" cy="320" r="3" fill="rgba(0,180,255,0.5)"/>
+    <circle cx="180" cy="480" r="3" fill="rgba(0,180,255,0.5)"/>
+    <circle cx="380" cy="240" r="4" fill="rgba(0,210,255,0.7)"/>
+    <circle cx="420" cy="500" r="3" fill="rgba(0,180,255,0.5)"/>
+    <line x1="120" y1="200" x2="260" y2="320" stroke="rgba(0,140,255,0.18)" stroke-width="1"/>
+    <line x1="260" y1="320" x2="380" y2="240" stroke="rgba(0,140,255,0.18)" stroke-width="1"/>
+    <line x1="260" y1="320" x2="180" y2="480" stroke="rgba(0,140,255,0.12)" stroke-width="1"/>
+    <line x1="380" y1="240" x2="420" y2="500" stroke="rgba(0,140,255,0.12)" stroke-width="1"/>
+    <!-- Title text area -->
+    <rect x="80" y="340" width="440" height="6" rx="3" fill="rgba(255,255,255,0.7)"/>
+    <rect x="80" y="360" width="320" height="4" rx="2" fill="rgba(0,170,255,0.8)"/>
+    <rect x="80" y="380" width="360" height="3" rx="1.5" fill="rgba(160,200,240,0.3)"/>
+    <!-- Pipeline cards -->
+    <rect x="80" y="520" width="130" height="80" rx="2" fill="rgba(4,13,28,0.98)" stroke="rgba(0,155,255,0.4)" stroke-width="1"/>
+    <rect x="230" y="520" width="130" height="80" rx="2" fill="rgba(4,14,30,0.98)" stroke="rgba(0,229,200,0.3)" stroke-width="1"/>
+    <rect x="380" y="520" width="130" height="80" rx="2" fill="rgba(4,13,26,0.98)" stroke="rgba(120,200,255,0.35)" stroke-width="1"/>
+    <rect x="80" y="522" width="130" height="2" rx="1" fill="#00aaff" opacity="0.8"/>
+    <rect x="230" y="522" width="130" height="2" rx="1" fill="#00e5c8" opacity="0.8"/>
+    <rect x="380" y="522" width="130" height="2" rx="1" fill="#7ec8ff" opacity="0.8"/>
+    <!-- Arrow connectors -->
+    <line x1="210" y1="560" x2="230" y2="560" stroke="rgba(0,170,255,0.5)" stroke-width="1.5"/>
+    <line x1="360" y1="560" x2="380" y2="560" stroke="rgba(0,200,200,0.5)" stroke-width="1.5"/>
+    <!-- Accent dot (nav logo) -->
+    <circle cx="40" cy="40" r="6" fill="#00aaff"/>
+    <rect x="28" y="28" width="24" height="24" fill="none" stroke="rgba(0,180,255,0.5)" stroke-width="1"/>
+  </svg>
+</template>
+</helmet>
+
+<!-- ── BACKGROUND CANVAS ── -->
+<canvas id="neural-canvas" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;"></canvas>
+
+<!-- ── NAVIGATION ── -->
+<nav style="position:fixed; top:0; left:0; right:0; z-index:100; height:68px; display:flex; align-items:center; justify-content:space-between; padding:0 56px; background:rgba(3,8,16,0.85); backdrop-filter:blur(16px); border-bottom:1px solid rgba(0,150,255,0.1);">
+  <div style="display:flex; align-items:center; gap:14px;">
+    <div style="width:34px; height:34px; border:1px solid rgba(0,180,255,0.5); display:flex; align-items:center; justify-content:center; position:relative;">
+      <div style="width:12px; height:12px; border-radius:50%; background:#00aaff; box-shadow:0 0 14px #00aaff;"></div>
+      <div style="position:absolute; top:-1px; left:-1px; right:-1px; bottom:-1px; border:1px solid rgba(0,200,255,0.2); transform:rotate(45deg);"></div>
+    </div>
+    <div>
+      <div style="font-family:Orbitron; font-size:13px; font-weight:600; color:#fff; letter-spacing:3px;">MARINE ICT</div>
+      <div style="font-size:10px; color:rgba(160,200,240,0.45); letter-spacing:1px; margin-top:1px;">해양 ICT 솔루션</div>
+    </div>
+  </div>
+  <div style="display:flex; gap:40px; align-items:center;">
+    <a href="#about" style="font-size:13px; color:rgba(160,200,240,0.6); text-decoration:none; letter-spacing:1px; transition:color 0.2s;" style-hover="color:#00aaff">소개</a>
+    <a href="#ai" style="font-size:13px; color:rgba(160,200,240,0.6); text-decoration:none; letter-spacing:1px;">AI 기술</a>
+    <a href="#tech" style="font-size:13px; color:rgba(160,200,240,0.6); text-decoration:none; letter-spacing:1px;">솔루션</a>
+    <a href="#contact" style="font-size:13px; padding:8px 22px; border:1px solid rgba(0,170,255,0.4); color:#00aaff; text-decoration:none; letter-spacing:1px; transition:all 0.25s;">문의하기</a>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════ -->
+<!-- HERO SECTION -->
+<!-- ════════════════════════════════ -->
+<section id="about" style="position:relative; min-height:100vh; display:flex; align-items:center; overflow:hidden; z-index:1; padding-top:68px;">
+  <!-- Ambient gradients -->
+  <div style="position:absolute; inset:0; background:radial-gradient(ellipse 900px 700px at 25% 55%, rgba(0,60,140,0.22), transparent); pointer-events:none;"></div>
+  <div style="position:absolute; inset:0; background:radial-gradient(ellipse 500px 500px at 75% 45%, rgba(0,80,120,0.18), transparent); pointer-events:none;"></div>
+
+  <div style="position:relative; z-index:2; max-width:1240px; margin:0 auto; padding:80px 56px; width:100%; display:flex; align-items:center; justify-content:space-between; gap:40px;">
+
+    <!-- Left: Copy -->
+    <div style="max-width:580px;">
+      <div style="display:inline-flex; align-items:center; gap:10px; margin-bottom:36px;">
+        <div style="width:7px; height:7px; border-radius:50%; background:#00aaff; box-shadow:0 0 12px #00aaff; animation:blink 2.5s ease-in-out infinite;"></div>
+        <span style="font-family:Orbitron; font-size:10px; color:#00aaff; letter-spacing:5px;">MARINE ICT SOLUTIONS</span>
+      </div>
+
+      <h1 style="font-family:'Noto Sans KR'; font-size:62px; font-weight:700; line-height:1.15; margin:0 0 28px; color:#fff; word-break:keep-all;">
+        해양의 미래를<br>
+        <span style="background:linear-gradient(120deg,#00aaff 0%,#00e5c8 50%,#00aaff 100%); background-size:200% auto; -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:shimmerText 3.5s linear infinite;">기술로 설계하다</span>
+      </h1>
+
+      <p style="font-size:17px; color:rgba(160,200,240,0.72); line-height:1.9; margin:0 0 52px; font-weight:300;">
+        바다의 방대한 데이터를 인공지능으로 분석하고<br>최적화된 솔루션을 제공하는 해양 ICT 전문 기업
+      </p>
+
+      <div style="display:flex; gap:14px;">
+        <a href="#ai" style="display:inline-block; padding:14px 32px; background:linear-gradient(135deg, rgba(0,160,255,0.18), rgba(0,220,200,0.08)); border:1px solid rgba(0,190,255,0.5); color:#00d4ff; font-size:14px; font-family:'Noto Sans KR'; letter-spacing:1.5px; cursor:pointer; text-decoration:none; transition:all 0.3s;">AI 기술 알아보기</a>
+        <a href="#tech" style="display:inline-block; padding:14px 32px; background:transparent; border:1px solid rgba(160,200,240,0.18); color:rgba(160,200,240,0.65); font-size:14px; font-family:'Noto Sans KR'; letter-spacing:1.5px; cursor:pointer; text-decoration:none; transition:all 0.3s;">솔루션 보기</a>
+      </div>
+    </div>
+
+    <!-- Right: Radar decoration -->
+    <div style="position:relative; width:460px; height:460px; flex-shrink:0;">
+      <div style="position:absolute; inset:0; border-radius:50%; border:1px dashed rgba(0,140,255,0.15); animation:rotateRing 60s linear infinite;"></div>
+      <div style="position:absolute; inset:52px; border-radius:50%; border:1px solid rgba(0,160,255,0.14); animation:counterRing 35s linear infinite;"></div>
+      <div style="position:absolute; inset:110px; border-radius:50%; border:1px dashed rgba(0,180,255,0.22); animation:rotateRing 20s linear infinite;"></div>
+      <div style="position:absolute; inset:170px; border-radius:50%; border:1px solid rgba(0,200,255,0.3); animation:counterRing 13s linear infinite;"></div>
+      <div style="position:absolute; inset:220px; border-radius:50%; border:1px dashed rgba(0,220,255,0.5);"></div>
+      <!-- Sweep arm -->
+      <div style="position:absolute; inset:0; border-radius:50%; overflow:hidden;">
+        <div style="position:absolute; top:50%; left:50%; width:50%; height:1px; transform-origin:left center; background:linear-gradient(to right, rgba(0,210,255,0.8), transparent); animation:rotateRing 6s linear infinite;"></div>
+        <div style="position:absolute; top:50%; left:50%; width:46%; height:1px; transform-origin:left center; background:linear-gradient(to right, rgba(0,210,255,0.35), transparent); animation:rotateRing 6s linear infinite; animation-delay:-0.6s;"></div>
+        <div style="position:absolute; top:50%; left:50%; width:40%; height:1px; transform-origin:left center; background:linear-gradient(to right, rgba(0,210,255,0.12), transparent); animation:rotateRing 6s linear infinite; animation-delay:-1.2s;"></div>
+      </div>
+      <!-- Tick marks on outer ring -->
+      <div style="position:absolute; inset:0; border-radius:50%; animation:rotateRing 60s linear infinite;">
+        <div style="position:absolute; top:0; left:50%; width:1px; height:10px; background:rgba(0,180,255,0.5); transform:translateX(-50%);"></div>
+        <div style="position:absolute; bottom:0; left:50%; width:1px; height:10px; background:rgba(0,180,255,0.5); transform:translateX(-50%);"></div>
+        <div style="position:absolute; top:50%; left:0; width:10px; height:1px; background:rgba(0,180,255,0.5); transform:translateY(-50%);"></div>
+        <div style="position:absolute; top:50%; right:0; width:10px; height:1px; background:rgba(0,180,255,0.5); transform:translateY(-50%);"></div>
+      </div>
+      <!-- Axis lines -->
+      <div style="position:absolute; inset:0; display:flex; align-items:center;">
+        <div style="width:100%; height:1px; background:linear-gradient(to right, transparent, rgba(0,150,255,0.08), transparent);"></div>
+      </div>
+      <div style="position:absolute; inset:0; display:flex; justify-content:center;">
+        <div style="height:100%; width:1px; background:linear-gradient(to bottom, transparent, rgba(0,150,255,0.08), transparent);"></div>
+      </div>
+      <!-- Center -->
+      <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;">
+        <div style="position:absolute; width:100px; height:100px; border-radius:50%; background:radial-gradient(circle, rgba(0,180,255,0.12), transparent 70%); animation:glowPulse 3s ease-in-out infinite;"></div>
+        <div style="width:14px; height:14px; border-radius:50%; background:#00c8ff; box-shadow:0 0 24px rgba(0,210,255,0.9), 0 0 50px rgba(0,210,255,0.4);"></div>
+      </div>
+      <!-- Floating data points -->
+      <div style="position:absolute; top:18%; left:22%; width:6px; height:6px; border-radius:50%; background:rgba(0,200,255,0.6); animation:floatY 4s ease-in-out infinite;"></div>
+      <div style="position:absolute; top:65%; left:72%; width:5px; height:5px; border-radius:50%; background:rgba(0,220,200,0.5); animation:floatY 5.5s ease-in-out infinite 1s;"></div>
+      <div style="position:absolute; top:30%; left:78%; width:4px; height:4px; border-radius:50%; background:rgba(0,180,255,0.7); animation:floatY 3.5s ease-in-out infinite 0.5s;"></div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div style="position:absolute; bottom:44px; left:50%; transform:translateX(-50%); z-index:3; display:flex; flex-direction:column; align-items:center; gap:10px;">
+    <span style="font-family:Orbitron; font-size:9px; color:rgba(160,200,240,0.35); letter-spacing:4px;">SCROLL</span>
+    <div style="width:1px; height:44px; background:linear-gradient(to bottom, rgba(0,160,255,0.6), transparent); position:relative; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; width:100%; height:40%; background:linear-gradient(to bottom, #00aaff, transparent); animation:scanDrop 2s linear infinite;"></div>
+    </div>
+  </div>
+
+  <!-- Bottom fade -->
+  <div style="position:absolute; bottom:0; left:0; right:0; height:180px; background:linear-gradient(to bottom, transparent, #030810); pointer-events:none; z-index:2;"></div>
+</section>
+
+
+<!-- ════════════════════════════════ -->
+<!-- AI SECTION — 페이지 중간 핵심 -->
+<!-- ════════════════════════════════ -->
+<section id="ai" style="position:relative; z-index:1; padding:130px 0 140px;">
+  <!-- Grid pattern -->
+  <div style="position:absolute; inset:0; background-image:linear-gradient(rgba(0,100,210,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(0,100,210,0.045) 1px, transparent 1px); background-size:64px 64px; pointer-events:none;"></div>
+  <!-- Ambient glow -->
+  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:900px; height:500px; background:radial-gradient(ellipse, rgba(0,80,180,0.12), transparent 70%); pointer-events:none;"></div>
+  <!-- Edge fades -->
+  <div style="position:absolute; top:0; left:0; right:0; height:80px; background:linear-gradient(to bottom, #030810, transparent); pointer-events:none;"></div>
+  <div style="position:absolute; bottom:0; left:0; right:0; height:80px; background:linear-gradient(to top, #030810, transparent); pointer-events:none;"></div>
+
+  <div style="max-width:1240px; margin:0 auto; padding:0 56px; position:relative; z-index:1;">
+
+    <!-- Section label -->
+    <div data-reveal="1" data-delay="0" style="display:flex; align-items:center; gap:16px; margin-bottom:28px;">
+      <div style="width:36px; height:1px; background:linear-gradient(to right, transparent, #00aaff);"></div>
+      <span style="font-family:Orbitron; font-size:10px; color:#00aaff; letter-spacing:5px;">ARTIFICIAL INTELLIGENCE</span>
+      <div style="flex:1; height:1px; background:linear-gradient(to right, #00aaff 0%, transparent 40%);"></div>
+    </div>
+
+    <!-- Headline -->
+    <h2 data-reveal="1" data-delay="100" style="font-size:50px; font-weight:700; color:#fff; line-height:1.2; margin:0 0 22px; word-break:keep-all;">
+      AI 학습 및 전처리를 통한<br>
+      <span style="color:#00aaff;">최적 모델 개발 시스템</span>
+    </h2>
+
+    <!-- Description -->
+    <p data-reveal="1" data-delay="180" style="font-size:17px; color:rgba(160,200,240,0.7); line-height:2; max-width:640px; font-weight:300; margin:0 0 72px;">
+      해양 ICT 전문 기업이 인공지능 학습과 정밀한 데이터 전처리를 통해<br>
+      최적화된 AI 모델을 구현합니다. 바다의 복잡한 환경 데이터를<br>
+      지능적으로 분석하고 예측하는 핵심 기술입니다.
+    </p>
+
+    <!-- ── Pipeline cards ── -->
+    <div data-reveal="1" data-delay="260" style="display:flex; align-items:stretch; position:relative; margin-bottom:1px;">
+
+      <!-- STEP 1 -->
+      <div style="flex:1; background:rgba(4,13,28,0.98); border:1px solid rgba(0,155,255,0.22); padding:44px 36px 40px; position:relative; overflow:hidden; animation:borderGlow 5s ease-in-out infinite;">
+        <div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent 0%, #00aaff 50%, transparent 100%);"></div>
+        <div style="font-family:Orbitron; font-size:56px; font-weight:800; color:rgba(0,160,255,0.09); position:absolute; top:20px; right:20px; line-height:1; user-select:none; letter-spacing:-2px;">01</div>
+
+        <!-- Icon -->
+        <div style="width:54px; height:54px; border:1px solid rgba(0,160,255,0.35); display:flex; align-items:center; justify-content:center; margin-bottom:28px; position:relative;">
+          <div style="display:flex; flex-direction:column; gap:4px;">
+            <div style="display:flex; gap:3px;">
+              <div style="width:6px; height:6px; background:rgba(0,160,255,0.9); border-radius:1px;"></div>
+              <div style="width:6px; height:6px; background:rgba(0,160,255,0.5); border-radius:1px;"></div>
+              <div style="width:6px; height:6px; background:rgba(0,160,255,0.25); border-radius:1px;"></div>
+            </div>
+            <div style="display:flex; gap:3px;">
+              <div style="width:6px; height:6px; background:rgba(0,160,255,0.5); border-radius:1px;"></div>
+              <div style="width:6px; height:6px; background:rgba(0,160,255,0.9); border-radius:1px;"></div>
+              <div style="width:6px; height:6px; background:rgba(0,160,255,0.5); border-radius:1px;"></div>
+            </div>
+            <div style="display:flex; gap:3px;">
+              <div style="width:6px; height:6px; background:rgba(0,160,255,0.25); border-radius:1px;"></div>
+              <div style="width:6px; height:6px; background:rgba(0,160,255,0.5); border-radius:1px;"></div>
+              <div style="width:6px; height:6px; background:rgba(0,160,255,0.9); border-radius:1px;"></div>
+            </div>
+          </div>
+          <div style="position:absolute; top:-4px; right:-4px; width:8px; height:8px; background:#00aaff; border-radius:50%; box-shadow:0 0 10px #00aaff;"></div>
+        </div>
+
+        <h3 style="font-size:21px; font-weight:700; color:#fff; margin:0 0 10px; line-height:1.35;">데이터 수집 및 학습</h3>
+        <p style="font-family:Orbitron; font-size:10px; color:#00aaff; letter-spacing:2.5px; margin:0 0 18px;">Data Collection &amp; Training</p>
+        <p style="font-size:14px; color:rgba(160,200,240,0.62); line-height:1.85; margin:0 0 28px;">
+          해양 환경의 다양한 센서와 장비로부터 방대한 데이터를 수집하고, AI 모델 학습에 최적화된 형태로 구조화합니다.
+        </p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <span style="font-size:11px; color:rgba(0,190,255,0.8); border:1px solid rgba(0,160,255,0.2); padding:4px 12px;">센서 데이터</span>
+          <span style="font-size:11px; color:rgba(0,190,255,0.8); border:1px solid rgba(0,160,255,0.2); padding:4px 12px;">딥러닝</span>
+          <span style="font-size:11px; color:rgba(0,190,255,0.8); border:1px solid rgba(0,160,255,0.2); padding:4px 12px;">빅데이터</span>
+        </div>
+      </div>
+
+      <!-- Connector 1→2 -->
+      <div style="width:80px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(3,8,16,0.95); position:relative; border-top:1px solid rgba(0,155,255,0.12); border-bottom:1px solid rgba(0,155,255,0.12);">
+        <div style="position:relative; width:100%; height:2px; background:rgba(0,140,255,0.12);">
+          <div style="position:absolute; top:50%; transform:translateY(-50%); width:10px; height:10px; border-radius:50%; background:#00aaff; box-shadow:0 0 14px rgba(0,200,255,0.9); animation:dataDot 2.6s linear infinite;"></div>
+        </div>
+        <div style="position:absolute; right:-1px; width:0; height:0; border-top:7px solid transparent; border-bottom:7px solid transparent; border-left:11px solid rgba(0,160,255,0.35); z-index:1;"></div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div style="flex:1; background:rgba(4,14,30,0.98); border:1px solid rgba(0,229,200,0.2); border-left:none; padding:44px 36px 40px; position:relative; overflow:hidden;">
+        <div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent 0%, #00e5c8 50%, transparent 100%);"></div>
+        <div style="font-family:Orbitron; font-size:56px; font-weight:800; color:rgba(0,229,200,0.08); position:absolute; top:20px; right:20px; line-height:1; user-select:none; letter-spacing:-2px;">02</div>
+
+        <!-- Icon -->
+        <div style="width:54px; height:54px; border:1px solid rgba(0,229,200,0.35); display:flex; align-items:center; justify-content:center; margin-bottom:28px; position:relative;">
+          <div style="display:flex; flex-direction:column; gap:5px; align-items:center;">
+            <div style="width:22px; height:2px; background:rgba(0,229,200,0.9);"></div>
+            <div style="width:16px; height:2px; background:rgba(0,229,200,0.65);"></div>
+            <div style="width:10px; height:2px; background:rgba(0,229,200,0.4);"></div>
+            <div style="width:6px; height:2px; background:rgba(0,229,200,0.25);"></div>
+          </div>
+          <div style="position:absolute; top:-4px; right:-4px; width:8px; height:8px; background:#00e5c8; border-radius:50%; box-shadow:0 0 10px #00e5c8;"></div>
+        </div>
+
+        <h3 style="font-size:21px; font-weight:700; color:#fff; margin:0 0 10px; line-height:1.35;">데이터 전처리 최적화</h3>
+        <p style="font-family:Orbitron; font-size:10px; color:#00e5c8; letter-spacing:2.5px; margin:0 0 18px;">Preprocessing &amp; Optimization</p>
+        <p style="font-size:14px; color:rgba(160,200,240,0.62); line-height:1.85; margin:0 0 28px;">
+          노이즈 제거, 이상치 탐지, 특성 추출로 데이터 품질을 극대화하고 모델 성능을 위한 최적 입력값을 생성합니다.
+        </p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <span style="font-size:11px; color:rgba(0,229,200,0.8); border:1px solid rgba(0,229,200,0.2); padding:4px 12px;">노이즈 제거</span>
+          <span style="font-size:11px; color:rgba(0,229,200,0.8); border:1px solid rgba(0,229,200,0.2); padding:4px 12px;">특성 추출</span>
+          <span style="font-size:11px; color:rgba(0,229,200,0.8); border:1px solid rgba(0,229,200,0.2); padding:4px 12px;">정규화</span>
+        </div>
+      </div>
+
+      <!-- Connector 2→3 -->
+      <div style="width:80px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(3,8,16,0.95); position:relative; border-top:1px solid rgba(0,155,255,0.12); border-bottom:1px solid rgba(0,155,255,0.12);">
+        <div style="position:relative; width:100%; height:2px; background:rgba(0,140,255,0.12);">
+          <div style="position:absolute; top:50%; transform:translateY(-50%); width:10px; height:10px; border-radius:50%; background:#00e5c8; box-shadow:0 0 14px rgba(0,229,200,0.9); animation:dataDot 2.6s linear infinite; animation-delay:-1.3s;"></div>
+        </div>
+        <div style="position:absolute; right:-1px; width:0; height:0; border-top:7px solid transparent; border-bottom:7px solid transparent; border-left:11px solid rgba(0,200,200,0.35); z-index:1;"></div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div style="flex:1; background:rgba(4,13,26,0.98); border:1px solid rgba(120,200,255,0.22); border-left:none; padding:44px 36px 40px; position:relative; overflow:hidden; animation:borderGlow 4s ease-in-out infinite 1.5s;">
+        <div style="position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent 0%, #7ec8ff 50%, transparent 100%);"></div>
+        <div style="font-family:Orbitron; font-size:56px; font-weight:800; color:rgba(120,200,255,0.09); position:absolute; top:20px; right:20px; line-height:1; user-select:none; letter-spacing:-2px;">03</div>
+
+        <!-- Icon: AI model circle -->
+        <div style="width:54px; height:54px; border:1px solid rgba(120,200,255,0.4); border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:28px; position:relative; animation:glowPulse 3s ease-in-out infinite;">
+          <div style="width:28px; height:28px; border-radius:50%; border:2px solid rgba(120,200,255,0.7); background:rgba(120,200,255,0.08); display:flex; align-items:center; justify-content:center;">
+            <div style="width:10px; height:10px; border-radius:50%; background:#7ec8ff; box-shadow:0 0 10px rgba(120,200,255,0.9);"></div>
+          </div>
+          <div style="position:absolute; top:-4px; right:-4px; width:8px; height:8px; background:#7ec8ff; border-radius:50%; box-shadow:0 0 10px #7ec8ff;"></div>
+        </div>
+
+        <h3 style="font-size:21px; font-weight:700; color:#fff; margin:0 0 10px; line-height:1.35;">최적 AI 모델 생성</h3>
+        <p style="font-family:Orbitron; font-size:10px; color:#7ec8ff; letter-spacing:2.5px; margin:0 0 18px;">Optimal Model Generation</p>
+        <p style="font-size:14px; color:rgba(160,200,240,0.62); line-height:1.85; margin:0 0 28px;">
+          정밀하게 준비된 데이터를 기반으로 최고 정확도의 AI 모델을 완성하고 지속적인 재학습으로 성능을 향상합니다.
+        </p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <span style="font-size:11px; color:rgba(140,210,255,0.8); border:1px solid rgba(120,200,255,0.2); padding:4px 12px;">모델 최적화</span>
+          <span style="font-size:11px; color:rgba(140,210,255,0.8); border:1px solid rgba(120,200,255,0.2); padding:4px 12px;">재학습</span>
+          <span style="font-size:11px; color:rgba(140,210,255,0.8); border:1px solid rgba(120,200,255,0.2); padding:4px 12px;">배포</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Stats ── -->
+    <div data-reveal="1" data-delay="380" style="display:flex; border:1px solid rgba(0,140,255,0.14); border-top:none;">
+      <div style="flex:1; padding:36px 44px; border-right:1px solid rgba(0,140,255,0.14); text-align:center;">
+        <div id="stat-0" style="font-family:Orbitron; font-size:44px; font-weight:800; color:#00aaff; line-height:1; margin-bottom:10px; letter-spacing:-1px;">0%</div>
+        <div style="font-size:12px; color:rgba(160,200,240,0.55); letter-spacing:1px;">모델 정확도</div>
+      </div>
+      <div style="flex:1; padding:36px 44px; border-right:1px solid rgba(0,140,255,0.14); text-align:center;">
+        <div id="stat-1" style="font-family:Orbitron; font-size:44px; font-weight:800; color:#00e5c8; line-height:1; margin-bottom:10px; letter-spacing:-1px;">0ms</div>
+        <div style="font-size:12px; color:rgba(160,200,240,0.55); letter-spacing:1px;">추론 속도</div>
+      </div>
+      <div style="flex:1; padding:36px 44px; border-right:1px solid rgba(0,140,255,0.14); text-align:center;">
+        <div id="stat-2" style="font-family:Orbitron; font-size:44px; font-weight:800; color:#00aaff; line-height:1; margin-bottom:10px; letter-spacing:-1px;">0TB+</div>
+        <div style="font-size:12px; color:rgba(160,200,240,0.55); letter-spacing:1px;">학습 데이터</div>
+      </div>
+      <div style="flex:1; padding:36px 44px; text-align:center;">
+        <div id="stat-3" style="font-family:Orbitron; font-size:44px; font-weight:800; color:#00e5c8; line-height:1; margin-bottom:10px; letter-spacing:-1px;">0+</div>
+        <div style="font-size:12px; color:rgba(160,200,240,0.55); letter-spacing:1px;">적용 AI 모델</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════ -->
+<!-- TECH FEATURES -->
+<!-- ════════════════════════════════ -->
+<section id="tech" style="position:relative; z-index:1; padding:120px 0 130px;">
+  <div style="max-width:1240px; margin:0 auto; padding:0 56px;">
+
+    <div data-reveal="1" data-delay="0" style="display:flex; align-items:center; gap:16px; margin-bottom:28px;">
+      <div style="width:36px; height:1px; background:linear-gradient(to right, transparent, #00aaff);"></div>
+      <span style="font-family:Orbitron; font-size:10px; color:#00aaff; letter-spacing:5px;">CORE TECHNOLOGY</span>
+      <div style="flex:1; height:1px; background:linear-gradient(to right, #00aaff 0%, transparent 40%);"></div>
+    </div>
+
+    <h2 data-reveal="1" data-delay="80" style="font-size:46px; font-weight:700; color:#fff; margin:0 0 64px; line-height:1.2; word-break:keep-all;">
+      AI 기술 핵심 <span style="color:#00aaff;">적용 분야</span>
+    </h2>
+
+    <div data-reveal="1" data-delay="160" style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+
+      <!-- Feature 1 -->
+      <div style="background:rgba(4,13,28,0.9); border:1px solid rgba(0,155,255,0.18); padding:48px 44px; position:relative; overflow:hidden; transition:border-color 0.3s;">
+        <div style="position:absolute; top:0; left:0; width:3px; height:100%; background:linear-gradient(to bottom, transparent, #00aaff, transparent);"></div>
+        <div style="width:56px; height:56px; border:1px solid rgba(0,160,255,0.3); display:flex; align-items:center; justify-content:center; margin-bottom:32px; position:relative;">
+          <!-- Monitoring icon: concentric arcs -->
+          <div style="position:relative; width:28px; height:28px;">
+            <div style="position:absolute; inset:0; border-radius:50%; border:1px solid rgba(0,180,255,0.8);"></div>
+            <div style="position:absolute; inset:6px; border-radius:50%; border:1px solid rgba(0,180,255,0.5);"></div>
+            <div style="position:absolute; inset:12px; border-radius:50%; background:rgba(0,180,255,0.8);"></div>
+          </div>
+        </div>
+        <h3 style="font-size:20px; font-weight:700; color:#fff; margin:0 0 14px;">해양 환경 모니터링</h3>
+        <p style="font-size:14px; color:rgba(160,200,240,0.6); line-height:1.85;">AI 기반 실시간 해양 기상·수질·수온 데이터를 수집·분석하여 이상 징후를 즉시 감지하는 지능형 모니터링 시스템</p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div style="background:rgba(4,13,28,0.9); border:1px solid rgba(0,155,255,0.18); padding:48px 44px; position:relative; overflow:hidden; transition:border-color 0.3s;">
+        <div style="position:absolute; top:0; left:0; width:3px; height:100%; background:linear-gradient(to bottom, transparent, #00e5c8, transparent);"></div>
+        <div style="width:56px; height:56px; border:1px solid rgba(0,229,200,0.3); display:flex; align-items:center; justify-content:center; margin-bottom:32px;">
+          <!-- Navigation: arrow + path dots -->
+          <div style="position:relative; width:28px; height:20px;">
+            <div style="position:absolute; bottom:0; left:0; right:0; height:1px; background:rgba(0,229,200,0.5); background-image:repeating-linear-gradient(to right, rgba(0,229,200,0.7) 0px, rgba(0,229,200,0.7) 4px, transparent 4px, transparent 8px);"></div>
+            <div style="position:absolute; top:0; right:0; width:0; height:0; border-left:8px solid transparent; border-right:8px solid transparent; border-bottom:14px solid rgba(0,229,200,0.9);"></div>
+          </div>
+        </div>
+        <h3 style="font-size:20px; font-weight:700; color:#fff; margin:0 0 14px;">선박 항로 최적화</h3>
+        <p style="font-size:14px; color:rgba(160,200,240,0.6); line-height:1.85;">해양 기상과 해류 데이터를 AI로 분석하여 최적의 항로를 실시간 제안하고 연료 효율 및 안전성을 동시에 향상</p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div style="background:rgba(4,13,28,0.9); border:1px solid rgba(0,155,255,0.18); padding:48px 44px; position:relative; overflow:hidden; transition:border-color 0.3s;">
+        <div style="position:absolute; top:0; left:0; width:3px; height:100%; background:linear-gradient(to bottom, transparent, #00aaff, transparent);"></div>
+        <div style="width:56px; height:56px; border:1px solid rgba(0,160,255,0.3); display:flex; align-items:center; justify-content:center; margin-bottom:32px;">
+          <!-- Prediction: triangle warning shape -->
+          <div style="position:relative; width:0; height:0; border-left:13px solid transparent; border-right:13px solid transparent; border-bottom:22px solid rgba(0,160,255,0.7);">
+            <div style="position:absolute; top:6px; left:-2px; width:4px; height:9px; background:#030810;"></div>
+            <div style="position:absolute; top:16px; left:-2px; width:4px; height:4px; background:#030810;"></div>
+          </div>
+        </div>
+        <h3 style="font-size:20px; font-weight:700; color:#fff; margin:0 0 14px;">해양 재난 예측</h3>
+        <p style="font-size:14px; color:rgba(160,200,240,0.6); line-height:1.85;">딥러닝 모델이 파도·풍속·조류 패턴을 분석해 이상 징후를 조기 감지하고 위험 상황을 선제적으로 경보</p>
+      </div>
+
+      <!-- Feature 4 -->
+      <div style="background:rgba(4,13,28,0.9); border:1px solid rgba(0,155,255,0.18); padding:48px 44px; position:relative; overflow:hidden; transition:border-color 0.3s;">
+        <div style="position:absolute; top:0; left:0; width:3px; height:100%; background:linear-gradient(to bottom, transparent, #00e5c8, transparent);"></div>
+        <div style="width:56px; height:56px; border:1px solid rgba(0,229,200,0.3); display:flex; align-items:center; justify-content:center; margin-bottom:32px;">
+          <!-- Communication: sine wave lines -->
+          <div style="display:flex; flex-direction:column; gap:5px; align-items:center;">
+            <svg width="28" height="14" viewBox="0 0 28 14" fill="none" style="overflow:visible;">
+              <path d="M0,7 Q3.5,0 7,7 Q10.5,14 14,7 Q17.5,0 21,7 Q24.5,14 28,7" stroke="rgba(0,229,200,0.8)" stroke-width="1.5" fill="none"></path>
+            </svg>
+            <svg width="20" height="10" viewBox="0 0 20 10" fill="none" style="overflow:visible;">
+              <path d="M0,5 Q2.5,0 5,5 Q7.5,10 10,5 Q12.5,0 15,5 Q17.5,10 20,5" stroke="rgba(0,229,200,0.4)" stroke-width="1" fill="none"></path>
+            </svg>
+          </div>
+        </div>
+        <h3 style="font-size:20px; font-weight:700; color:#fff; margin:0 0 14px;">수중 통신 최적화</h3>
+        <p style="font-size:14px; color:rgba(160,200,240,0.6); line-height:1.85;">AI 기반 수중 음파 통신 신호 처리 알고리즘으로 전송 품질을 극대화하고 장거리 해저 통신 신뢰성 향상</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════ -->
+<!-- FOOTER -->
+<!-- ════════════════════════════════ -->
+<footer id="contact" style="position:relative; z-index:1; border-top:1px solid rgba(0,140,255,0.12); padding:60px 56px;">
+  <div style="max-width:1240px; margin:0 auto; display:flex; align-items:center; justify-content:space-between;">
+    <div>
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+        <div style="width:28px; height:28px; border:1px solid rgba(0,180,255,0.4); display:flex; align-items:center; justify-content:center; position:relative;">
+          <div style="width:9px; height:9px; border-radius:50%; background:#00aaff; box-shadow:0 0 10px #00aaff;"></div>
+          <div style="position:absolute; top:-1px; left:-1px; right:-1px; bottom:-1px; border:1px solid rgba(0,200,255,0.15); transform:rotate(45deg);"></div>
+        </div>
+        <span style="font-family:Orbitron; font-size:13px; font-weight:600; color:#fff; letter-spacing:3px;">MARINE ICT</span>
+      </div>
+      <p style="font-size:13px; color:rgba(160,200,240,0.45); margin:0; letter-spacing:0.5px;">해양 ICT 전문 기업 | AI 솔루션 개발사</p>
+    </div>
+    <div style="text-align:right;">
+      <p style="font-family:Orbitron; font-size:11px; color:rgba(160,200,240,0.3); letter-spacing:2px; margin:0 0 8px;">© 2025 MARINE ICT. ALL RIGHTS RESERVED.</p>
+      <div style="display:flex; gap:20px; justify-content:flex-end;">
+        <a href="#" style="font-size:12px; color:rgba(160,200,240,0.4); text-decoration:none;">개인정보처리방침</a>
+        <a href="#" style="font-size:12px; color:rgba(160,200,240,0.4); text-decoration:none;">이용약관</a>
+        <a href="#" style="font-size:12px; color:rgba(0,180,255,0.6); text-decoration:none;">문의하기</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() {
+    this._setupCanvas();
+    this._setupReveal();
+    this._setupStats();
+  }
+
+  componentWillUnmount() {
+    cancelAnimationFrame(this._rafId);
+  }
+
+  _setupCanvas() {
+    const canvas = document.getElementById('neural-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const setSize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    setSize();
+    window.addEventListener('resize', setSize);
+
+    const N = 72;
+    const nodes = Array.from({ length: N }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * 0.38,
+      vy: (Math.random() - 0.5) * 0.38,
+      r: Math.random() * 1.4 + 0.4,
+      bright: Math.random() > 0.82,
+      phase: Math.random() * Math.PI * 2,
+    }));
+
+    const LINK = 155;
+    let tick = 0;
+
+    const draw = () => {
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+      tick++;
+
+      nodes.forEach(n => {
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < 0 || n.x > W) n.vx *= -1;
+        if (n.y < 0 || n.y > H) n.vy *= -1;
+      });
+
+      for (let i = 0; i < N; i++) {
+        for (let j = i + 1; j < N; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < LINK) {
+            const a = (1 - d / LINK) * 0.11;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.strokeStyle = `rgba(0,140,255,${a})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      nodes.forEach(n => {
+        const g = n.bright ? 0.4 + 0.6 * Math.sin(tick * 0.025 + n.phase) : 0;
+        if (n.bright) {
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r * 5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(0,180,255,${g * 0.12})`;
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = n.bright
+          ? `rgba(0,210,255,${0.35 + g * 0.65})`
+          : 'rgba(0,120,220,0.28)';
+        ctx.fill();
+      });
+
+      this._rafId = requestAnimationFrame(draw);
+    };
+
+    draw();
+  }
+
+  _setupReveal() {
+    const reveal = (el) => {
+      const delay = parseInt(el.dataset.delay || 0, 10);
+      setTimeout(() => {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      }, delay);
+    };
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          reveal(e.target);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px 120px 0px' });
+
+    document.querySelectorAll('[data-reveal]').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(28px)';
+      el.style.transition = 'opacity 0.75s ease, transform 0.75s ease';
+      io.observe(el);
+    });
+
+    // Safety fallback: force-reveal any still-hidden elements after 2.5s
+    setTimeout(() => {
+      document.querySelectorAll('[data-reveal]').forEach(el => {
+        if (el.style.opacity === '0') reveal(el);
+      });
+    }, 2500);
+  }
+
+  _setupStats() {
+    const cfg = [
+      { id: 'stat-0', end: 99.2, dec: 1, suffix: '%' },
+      { id: 'stat-1', end: 0.3,  dec: 1, suffix: 'ms' },
+      { id: 'stat-2', end: 5,    dec: 0, suffix: 'TB+' },
+      { id: 'stat-3', end: 47,   dec: 0, suffix: '+' },
+    ];
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const c = cfg.find(x => x.id === e.target.id);
+        if (!c) return;
+        io.unobserve(e.target);
+        const el = e.target;
+        const dur = 1600;
+        const t0 = performance.now();
+        const tick = now => {
+          const p = Math.min((now - t0) / dur, 1);
+          const ease = 1 - Math.pow(1 - p, 3);
+          el.textContent = (c.end * ease).toFixed(c.dec) + c.suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.5 });
+
+    cfg.forEach(c => {
+      const el = document.getElementById(c.id);
+      if (el) io.observe(el);
+    });
+  }
+
+  renderVals() { return {}; }
+}
+
+</script>
+</body>
+</html>
