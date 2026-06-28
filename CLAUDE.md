@@ -211,4 +211,49 @@ NavBar
    - Section > Container > Content 구조
    - Footer 사용
 
+## 백엔드 API 연동 가이드
+
+### YOLO 영상 객체탐지 API (Django)
+
+**기술 스택**
+- 백엔드: Django (localhost:8000)
+- 영상 처리: OpenCV + YOLOv8
+- 파일 저장: 로컬 디스크 (향후 S3 연결 가능)
+
+**API 엔드포인트**
+```
+POST   /detection/upload/              → 영상 업로드 & 처리 시작
+GET    /detection/jobs/                → 최근 작업 목록
+GET    /detection/jobs/{id}/           → 작업 상태 조회
+GET    /detection/jobs/{id}/original/  → 원본 영상 스트리밍
+GET    /detection/jobs/{id}/video/     → 처리 영상 스트리밍
+GET    /detection/jobs/{id}/download/  → 처리 영상 다운로드
+```
+
+**주요 구현 사항**
+
+1. **파일 서빙 패턴**
+   - 서버: Django 엔드포인트를 통해 파일 스트리밍
+   - 이유: 브라우저 `file://` 프로토콜 보안 차단 방지
+   - 향후: S3 등 클라우드 스토리지 연결 시 동일 엔드포인트에서 처리
+
+2. **영상 코덱 (중요)**
+   ```python
+   # ✅ H264 사용 (브라우저 호환성 높음)
+   fourcc = cv2.VideoWriter_fourcc(*"H264")
+   
+   # ❌ mp4v 사용 금지 (일부 브라우저 미지원)
+   # fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+   ```
+
+3. **폴링 패턴 (React)**
+   - 영상 업로드 후 2초마다 상태 확인
+   - 처리 상태: pending → processing → done/failed
+   - 완료 시 자동으로 결과 표시
+
+4. **에러 처리**
+   - 네트워크 에러: 사용자 안내 메시지
+   - 파일 크기 제한: 500MB (설정 가능)
+   - 처리 실패: 사유 표시 및 재시도 옵션
+
 ## Claude Design 으로 만든페이지 샘플

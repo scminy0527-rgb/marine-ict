@@ -1,6 +1,8 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import * as S from "./YoloTestPage.style";
 import Navigation from "../../components/main/Navigation";
+
+const API_BASE_URL = "http://localhost:8000";
 
 export default function YoloTestPage() {
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -8,8 +10,12 @@ export default function YoloTestPage() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState(null);
   const [result, setResult] = useState(null);
+  const [jobId, setJobId] = useState(null);
+  const [jobStatus, setJobStatus] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef(null);
   const dropZoneRef = useRef(null);
+  const pollingIntervalRef = useRef(null);
 
   const handleDragEnter = (e) => {
     e.preventDefault();
@@ -65,87 +71,129 @@ export default function YoloTestPage() {
     handleUpload(file);
   };
 
+  const checkJobStatus = async (id) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/detection/jobs/${id}/`);
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      console.error("Failed to check job status:", err);
+      return null;
+    }
+  };
+
+  const startPolling = (id) => {
+    console.log("동영상 처리 시간");
+    pollingIntervalRef.current = setInterval(async () => {
+      const job = await checkJobStatus(id);
+      if (!job) return;
+
+      setJobStatus(job.status);
+
+      if (job.status === "done") {
+        clearInterval(pollingIntervalRef.current);
+        setIsProcessing(false);
+        setUploadProgress(100);
+
+        console.log(`결과 비디오 url: ${job.result_video_url}`);
+
+        setResult({
+          id: job.id,
+          status: job.status,
+          detected_count: job.detected_count || 0,
+          detection_summary: job.detection_summary || {},
+          result_video_url: job.result_video_url,
+          original_video_url: job.original_video_url,
+          processing_time: job.processing_time || 0,
+        });
+      } else if (job.status === "failed") {
+        clearInterval(pollingIntervalRef.current);
+        setIsProcessing(false);
+        setError(job.error || "처리 중 오류가 발생했습니다");
+      } else if (job.status === "processing") {
+        const progress = job.progress || 0;
+        setUploadProgress(Math.min(progress, 95));
+      }
+    }, 2000);
+  };
+
   const handleUpload = async (file) => {
     setIsUploading(true);
     setUploadProgress(0);
     setError(null);
+    setIsProcessing(true);
 
     try {
       const formData = new FormData();
-      formData.append("video", file);
+      formData.append("original_video", file);
 
-      // 백엔드 API 엔드포인트로 변경해야 합니다
-      // const response = await fetch("/api/yolo/detect", {
-      //   method: "POST",
-      //   body: formData,
-      //   onUploadProgress: (progressEvent) => {
-      //     const progress = Math.round(
-      //       (progressEvent.loaded / progressEvent.total) * 100
-      //     );
-      //     setUploadProgress(progress);
-      //   },
-      // });
+      const xhr = new XMLHttpRequest();
 
-      // 임시 시뮬레이션 (백엔드 준비 후 제거)
-      await simulateUpload();
+      xhr.upload.addEventListener("progress", (e) => {
+        if (e.lengthComputable) {
+          const progress = Math.round((e.loaded / e.total) * 100 * 0.3);
+          setUploadProgress(progress);
+        }
+      });
 
-      // const data = await response.json();
-      // if (response.ok) {
-      //   setResult(data);
-      //   setUploadProgress(100);
-      // } else {
-      //   setError(data.message || "업로드 중 오류가 발생했습니다");
-      // }
+      xhr.addEventListener("load", async () => {
+        if (xhr.status === 200 || xhr.status === 201) {
+          const data = JSON.parse(xhr.responseText);
+          const id = data.id;
+          setJobId(id);
+          setUploadProgress(30);
+          startPolling(id);
+        } else {
+          const data = JSON.parse(xhr.responseText);
+          setError(data.detail || "업로드 중 오류가 발생했습니다");
+          setIsProcessing(false);
+        }
+        setIsUploading(false);
+      });
+
+      xhr.addEventListener("error", () => {
+        setError("네트워크 오류가 발생했습니다");
+        setIsProcessing(false);
+        setIsUploading(false);
+      });
+
+      xhr.open("POST", `${API_BASE_URL}/detection/upload/`);
+      xhr.send(formData);
     } catch (err) {
       setError("업로드 중 오류가 발생했습니다: " + err.message);
-    } finally {
+      setIsProcessing(false);
       setIsUploading(false);
     }
   };
 
-  // 백엔드가 준비되면 이 함수는 제거해야 합니다
-  const simulateUpload = () => {
-    return new Promise((resolve) => {
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += Math.random() * 30;
-        if (progress >= 100) {
-          progress = 100;
-          clearInterval(interval);
-          setUploadProgress(100);
-
-          // 모의 결과 데이터
-          setTimeout(() => {
-            setResult({
-              original_video_url: URL.createObjectURL(uploadedFile),
-              processed_video_url: URL.createObjectURL(uploadedFile),
-              detection_count: 42,
-              processing_time: 12.5,
-              model_version: "YOLOv8",
-            });
-            resolve();
-          }, 500);
-        } else {
-          setUploadProgress(Math.floor(progress));
-        }
-      }, 200);
-    });
-  };
+  useEffect(() => {
+    return () => {
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+      }
+    };
+  }, []);
 
   const handleReset = () => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+    }
     setUploadedFile(null);
     setUploadProgress(0);
     setError(null);
     setResult(null);
+    setJobId(null);
+    setJobStatus(null);
+    setIsProcessing(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
 
   const handleDownload = () => {
-    if (result?.processed_video_url) {
+    if (result?.result_video_url) {
       const a = document.createElement("a");
-      a.href = result.processed_video_url;
+      a.href = result.result_video_url;
       a.download = "yolo_detected_video.mp4";
       document.body.appendChild(a);
       a.click();
@@ -209,14 +257,38 @@ export default function YoloTestPage() {
         </S.UploadContainer>
 
         {/* Progress Section */}
-        {(isUploading || uploadProgress > 0) && !result && (
+        {(isUploading || isProcessing || uploadProgress > 0) && !result && (
           <S.ProgressSection>
             <S.ProgressContainer>
-              <S.ProgressLabel>처리 진행도</S.ProgressLabel>
+              <S.ProgressLabel>
+                처리 진행도
+                {jobStatus && (
+                  <span
+                    style={{
+                      marginLeft: "12px",
+                      fontSize: "14px",
+                      color: "#00aaff",
+                    }}
+                  >
+                    상태: {jobStatus === "pending" && "대기중"}
+                    {jobStatus === "processing" && "처리중"}
+                    {jobStatus === "done" && "완료"}
+                    {jobStatus === "failed" && "실패"}
+                  </span>
+                )}
+              </S.ProgressLabel>
               <S.ProgressBar>
                 <S.ProgressFill $width={uploadProgress} />
               </S.ProgressBar>
               <S.ProgressText>{uploadProgress}%</S.ProgressText>
+              {isUploading && (
+                <S.ProgressSubtext>파일 업로드 중...</S.ProgressSubtext>
+              )}
+              {isProcessing && !isUploading && (
+                <S.ProgressSubtext>
+                  YOLO 모델이 영상을 처리 중입니다...
+                </S.ProgressSubtext>
+              )}
             </S.ProgressContainer>
           </S.ProgressSection>
         )}
@@ -247,7 +319,7 @@ export default function YoloTestPage() {
                 <S.VideoContainer>
                   <video controls>
                     <source
-                      src={result.processed_video_url}
+                      src={result.result_video_url}
                       type="video/mp4"
                     />
                     브라우저가 동영상 재생을 지원하지 않습니다.
@@ -264,17 +336,24 @@ export default function YoloTestPage() {
                   <div>
                     <h4>탐지된 객체</h4>
                     <p style={{ fontSize: "24px", color: "#00c8ff" }}>
-                      {result.detection_count}개
+                      {result.detected_count || 0}개
                     </p>
                   </div>
-                  <div style={{ marginTop: "16px" }}>
-                    <h4>처리 시간</h4>
-                    <p>{result.processing_time.toFixed(1)}초</p>
-                  </div>
-                  <div style={{ marginTop: "16px" }}>
-                    <h4>모델 버전</h4>
-                    <p>{result.model_version}</p>
-                  </div>
+                  {result.processing_time > 0 && (
+                    <div style={{ marginTop: "16px" }}>
+                      <h4>처리 시간</h4>
+                      <p>{result.processing_time.toFixed(1)}초</p>
+                    </div>
+                  )}
+                  {result.detection_summary &&
+                    Object.keys(result.detection_summary).length > 0 && (
+                      <div style={{ marginTop: "16px" }}>
+                        <h4>탐지 요약</h4>
+                        <p style={{ fontSize: "12px", whiteSpace: "pre-wrap" }}>
+                          {JSON.stringify(result.detection_summary, null, 2)}
+                        </p>
+                      </div>
+                    )}
                 </S.CardContent>
               </S.ResultCard>
 
@@ -289,10 +368,7 @@ export default function YoloTestPage() {
                     >
                       결과 영상 받기
                     </S.ActionButton>
-                    <S.ActionButton
-                      onClick={handleReset}
-                      title="초기화"
-                    >
+                    <S.ActionButton onClick={handleReset} title="초기화">
                       다시 시작
                     </S.ActionButton>
                   </S.ActionButtons>
@@ -310,7 +386,9 @@ export default function YoloTestPage() {
         {!result && !isUploading && uploadProgress === 0 && !uploadedFile && (
           <S.ProgressSection>
             <S.EmptyState>
-              <p>동영상을 업로드하면 YOLO 모델의 처리 결과를 확인할 수 있습니다.</p>
+              <p>
+                동영상을 업로드하면 YOLO 모델의 처리 결과를 확인할 수 있습니다.
+              </p>
             </S.EmptyState>
           </S.ProgressSection>
         )}

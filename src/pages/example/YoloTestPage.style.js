@@ -296,6 +296,25 @@ export const ProgressText = styled.div`
   text-align: right;
 `;
 
+export const ProgressSubtext = styled.div`
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 12px;
+  color: ${theme.COLOR.textSecondary};
+  margin-top: 12px;
+  text-align: center;
+  font-weight: ${theme.FONT_WEIGHT.light};
+  animation: glowPulse 2s ease-in-out infinite;
+
+  @keyframes glowPulse {
+    0%, 100% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+`;
+
 export const ResultsSection = styled(Section)`
   padding: 80px ${theme.SPACING.containerPadding};
 `;
